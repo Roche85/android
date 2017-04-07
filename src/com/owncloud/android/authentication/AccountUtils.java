@@ -28,9 +28,11 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import com.owncloud.android.MainApp;
+import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils.Constants;
 import com.owncloud.android.lib.common.utils.Log_OC;
+import com.owncloud.android.lib.resources.status.OCCapability;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 
 import java.util.Locale;
@@ -312,24 +314,25 @@ public class AccountUtils {
     public static OwnCloudVersion getServerVersion(Account account) {
         OwnCloudVersion serverVersion = null;
         if (account != null) {
-            AccountManager accountMgr = AccountManager.get(MainApp.getAppContext());
-            String serverVersionStr = accountMgr.getUserData(account, Constants.KEY_OC_VERSION);
-            if (serverVersionStr != null) {
-                serverVersion = new OwnCloudVersion(serverVersionStr);
+            // capabilities are now the preferred source for version info
+            FileDataStorageManager fds = new FileDataStorageManager(
+                account,
+                MainApp.getAppContext().getContentResolver()
+            );
+            OCCapability capability = fds.getCapability(account.name);
+            if (capability != null) {
+                serverVersion = new OwnCloudVersion(capability.getVersionString());
+
+            } else {
+                // legacy: AccountManager as source of version info
+                AccountManager accountMgr = AccountManager.get(MainApp.getAppContext());
+                String serverVersionStr = accountMgr.getUserData(account, Constants.KEY_OC_VERSION);
+                if (serverVersionStr != null) {
+                    serverVersion = new OwnCloudVersion(serverVersionStr);
+                }
             }
         }
         return serverVersion;
     }
 
-    public static boolean hasSearchUsersSupport(Account account){
-        OwnCloudVersion serverVersion = null;
-        if (account != null) {
-            AccountManager accountMgr = AccountManager.get(MainApp.getAppContext());
-            String serverVersionStr = accountMgr.getUserData(account, Constants.KEY_OC_VERSION);
-            if (serverVersionStr != null) {
-                serverVersion = new OwnCloudVersion(serverVersionStr);
-            }
-        }
-        return (serverVersion != null ? serverVersion.isSearchUsersSupported() : false);
-    }
 }
