@@ -20,10 +20,12 @@
 package com.owncloud.android.ui.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
@@ -33,9 +35,50 @@ import com.owncloud.android.datamodel.OCFile;
  */
 public abstract class ToolbarActivity extends BaseActivity {
 
+    //private MaterialSearchView searchView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+/*
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        searchView.setVoiceSearch(false);
+        searchView.setCursorDrawable(R.drawable.custom_cursor);
+        searchView.setEllipsize(true);
+       searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
+        searchView.setSubmitOnClick(true);
+
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+            //    Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
+             //           .show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+            }
+        });
+
+
+*/
+
     }
 
     /**

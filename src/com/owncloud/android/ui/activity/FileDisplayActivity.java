@@ -53,6 +53,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.exoplayer2.source.MediaSource;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
@@ -137,6 +138,7 @@ public class FileDisplayActivity extends HookActivity
 
     private OCFile mWaitingToSend;
 
+    private MaterialSearchView searchView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log_OC.v(TAG, "onCreate() start");
@@ -189,6 +191,42 @@ public class FileDisplayActivity extends HookActivity
             fm.beginTransaction()
                     .add(taskRetainerFragment, TaskRetainerFragment.FTAG_TASK_RETAINER_FRAGMENT).commit();
         }   // else, Fragment already created and retained across configuration change
+
+
+
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        searchView.setVoiceSearch(false);
+        searchView.setCursorDrawable(R.drawable.custom_cursor);
+        searchView.setEllipsize(true);
+        searchView.setSubmitOnClick(true);
+        searchView.setSuggestions(getResources().getStringArray(R.array.query_suggestions));
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
+                        .show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+            }
+        });
+
 
         Log_OC.v(TAG, "onCreate() end");
     }
@@ -516,6 +554,8 @@ public class FileDisplayActivity extends HookActivity
 
         inflater.inflate(R.menu.main_menu, menu);
         menu.findItem(R.id.action_create_dir).setVisible(false);
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
         return true;
     }
 
