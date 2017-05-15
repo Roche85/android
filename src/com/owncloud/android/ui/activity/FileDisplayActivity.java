@@ -47,6 +47,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -204,12 +205,19 @@ public class FileDisplayActivity extends HookActivity
             public boolean onQueryTextSubmit(String query) {
               //  Snackbar.make(findViewById(R.id.container), "Query: " + query, Snackbar.LENGTH_LONG)
                //         .show();
+
+                Log_OC.e("onQueryTextSubmit","submit");
+                Intent intent = new Intent(FileDisplayActivity.this,SearchPicsActivity.class);
+                startActivity(intent);
+
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 //Do some magic
+                Log_OC.e("onQueryTextChange","Change");
+
                 return false;
             }
         });
